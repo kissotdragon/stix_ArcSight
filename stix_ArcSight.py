@@ -194,7 +194,7 @@ def process_package_dict(args,stix_dict):
 						with open('WebSites.txt', 'a') as mysites:
 							mysites.writelines("%s\n" % item)
 					if args[0].arcsight:
-						cef = 'CEF:0|IHC-OSINT|NH-ISAC|1.0|100|Known Malicious '+'Website'+'|1|request='+item+' shost='+u.netloc+' msg=NH-ISAC Malicious Domain ' + u.netloc
+						cef = 'CEF:0|IHC-OSINT|HGWL|1.0|100|Known Malicious '+'Website'+'|1|request='+item+' shost='+u.netloc+' msg=NH-ISAC Malicious Domain ' + u.netloc
 						time.sleep(.02)
 						syslog(cef, host=dest,port=dest_port)
 				elif re.match("[^@]+@[^@]+\.[^@]+", item ):
@@ -204,7 +204,7 @@ def process_package_dict(args,stix_dict):
 						with open('EmailAddresses.txt', 'a') as myemails: 
 							myemails.writelines("%s\n" % item)
 					if args[0].arcsight:
-						cef = 'CEF:0|IHC-OSINT|NH-ISAC|1.0|100|Known Malicious '+'Email'+'|1|suser='+item+' msg=NH-ISAC Malicious Email '+item
+						cef = 'CEF:0|IHC-OSINT|HGWL|1.0|100|Known Malicious '+'Email'+'|1|suser='+item+' msg=NH-ISAC Malicious Email '+item
 						time.sleep(.02)
 						syslog(cef, host=dest,port=dest_port)
 				elif re.match("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", item):
@@ -214,7 +214,7 @@ def process_package_dict(args,stix_dict):
 						with open('MyIPs.txt', 'a') as myips:
                                                         myips.writelines("%s\n" % item)
 					if args[0].arcsight:
-						cef = 'CEF:0|NH-ISAC|HGWL|1.0|100|Known Malicious '+'Host'+'|1|src='+item+' msg=NH-ISAC Malicious IP '+item			
+						cef = 'CEF:0|IHC-OSINT|HGWL|1.0|100|Known Malicious '+'Host'+'|1|src='+item+' msg=NH-ISAC Malicious IP '+item			
 						time.sleep(0.2)
 						syslog(cef, host=dest,port=dest_port)
 				elif re.match("^:", item):
@@ -228,7 +228,7 @@ def process_package_dict(args,stix_dict):
 						with open('AdditionalDomains.txt', 'a') as adom:
                                                         adom.writelines("%s\n" % item)
 					if args[0].arcsight:	
-						cef = 'CEF:0|NH-ISAC|HGWL|1.0|100|Malicious '+'Domain'+'|1|request='+item+' msg=NH-ISAC Malicious Domain '+d.netloc
+						cef = 'CEF:0|IHC-OSINT|HGWL|1.0|100|Malicious '+'Domain'+'|1|request='+item+' msg=NH-ISAC Malicious Domain '+d.netloc
                                         	time.sleep(0.2)
                                         	syslog(cef, host=dest,port=dest_port)	
 				else:
@@ -238,7 +238,7 @@ def process_package_dict(args,stix_dict):
 						with open('Indicators.txt', 'a') as Idom:
                                                         Idom.writelines("%s\n" % item)
 					if args[0].arcsight:
-						cef = 'CEF:0|NH-ISAC|HGWL|1.0|100|Known Malicious '+'Indicator'+'|1|cs1='+item+' msg=NH-ISAC Malicious Indicator '+item
+						cef = 'CEF:0|IHC-OSINT|HGWL|1.0|100|Known Malicious '+'Indicator'+'|1|cs1='+item+' msg=NH-ISAC Malicious Indicator '+item
                                         	time.sleep(0.2)
                                         	syslog(cef, host=dest,port=dest_port)
 			except ValueError:
