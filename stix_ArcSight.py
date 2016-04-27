@@ -1,5 +1,6 @@
 #!/usr/bin/python2
 # Author: John Kennedy
+# Email: kissotdragon@gmail.com
 # Date: 04/26/2016
 # 
 # This is a derivative work from the stix_import.py script created by IBM-Security
