@@ -23,7 +23,7 @@ This is a script that connects to a TAXII servers discovery service, grabs the S
     python stix_ArcSight.py --arcsight -x 'soltra01' --taxii_endpoint '/taxii-discovery-service' -c system.Default --taxiiport=80 --taxii_username=soltraAnalyst1 --taxii_password='password' --taxii_start_time='2016-04-25 00:00:00' --taxii_end_time='2016-04-25 23:59:59'
 
 ## Import from a STIX file
-    stix_ArcSight.py --file --taxii_endpoint '/taxii-discovery-service' -c system.Default --taxiiport=80 --taxii_username=soltraAnalyst1 --taxii_password='password' --taxii_start_time='2016-04-25 00:00:00' --taxii_end_time='2016-04-25 23:59:59'
+    python stix_ArcSight.py --verbose --file STIXDocument.xml 
     
 ## Display Help
     python stix_ArcSight.py [-h | --help]
