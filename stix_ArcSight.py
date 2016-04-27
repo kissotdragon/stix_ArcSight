@@ -232,7 +232,19 @@ def process_package_dict(args,stix_dict):
 					if args[0].arcsight:	
 						cef = 'CEF:0|IHC-OSINT|Soltra|1.0|100|Malicious '+'Domain'+'|1|request='+item+' msg=IHC-OSINT Malicious Domain '+d.netloc
                                         	time.sleep(0.2)
-                                        	syslog(cef, host=dest,port=dest_port)	
+                                        	syslog(cef, host=dest,port=dest_port)
+                                elif re.match("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}$", item):
+                                        data = item.split(":")
+                                        #print data
+                                        if args[0].verbose:
+                                                print 'IP Address: %s | Dest Port: %s' % ( data[0], data[1] )
+                                        if args[0].outfile:
+                                                 with open('IPandPort.txt', 'a') as IPdom:
+                                                        IPdom.writelines("%s\n" % item)
+                                        if args[0].arcsight:
+                                                cef = 'CEF:0|IHC-OSINT|Soltra|1.0|100|Known Malicious '+'IP and Port'+'|1|src='+data[0]+' dpt='+data[1]+' msg=NH-ISAC Malicious IP '+data[0]+' and Port '+data[1]
+                                                time.sleep(0.2)
+                                                syslog(cef, host=dest,port=dest_port)
 				else:
 					if args[0].verbose:
 						print 'Indicator: %s' % ( item )
