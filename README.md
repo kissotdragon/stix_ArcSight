@@ -4,7 +4,7 @@ A STIX/TAXII client that grabs STIX data from a TAXII discovery service, parses 
 # Requirements
 This script was written to run in Python 2.7 and higher -- a dependancy of the STIX library.  It might work in Python 3, but I have not tested it.
 
-This script requires some python dependancies.  You can install these using pip.
+This script requires some python dependencies.  You can install these using pip.
 
 # Description
 This script is a derivative of a script called stix_import.py created by IBM-Security
