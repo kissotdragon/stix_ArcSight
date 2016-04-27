@@ -344,11 +344,11 @@ def main():
 	# Import from a XML file on disk
 	elif args[0].file:
 		
-		stix_package = xmlParser.parse_xml(args[0].file, False)
+		stix_package = STIXPackage.from_xml(args[0].file)
 
 		indicators = process_package_dict( args, stix_package.to_dict() )
 		
-		print "Imported", indicators, "indicators into reference set", args[0].referenceset
+		print "Imported", indicators, "indicators into set"
 	
 	else:
 		print >> sys.stderr, "Invalid arguments. Type 'python stix_import.py --help' for usage.\n"
