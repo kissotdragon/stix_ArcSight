@@ -62,7 +62,7 @@ Options:
                         The end timestamp (YYYY-MM-dd HH:MM:SS) in UTC for the
                         taxii poll request. Defaults to None.
 
-Copyright 2016 John Kennedy
+Copyright 2016 Intermountain Health Services
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
