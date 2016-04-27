@@ -2,8 +2,9 @@
 # Author: John Kennedy
 # Date: 04/26/2016
 # 
-# This is a port of the stix_import.py script used to send stix information to IBM's QRadar
+# This is a derivative work from the stix_import.py script created by IBM-Security
 #
+# 
 import sys, socket, os, types, collections, json, re, io, urllib2, dateutil, datetime, time, pytz
 #from IPython.Debugger import Tracer; debug_here = Tracer()
 import pprint, getpass, csv
