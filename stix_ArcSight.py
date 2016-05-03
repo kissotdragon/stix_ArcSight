@@ -365,7 +365,7 @@ def main():
 		print "Imported", indicators, "indicators into set"
 	
 	else:
-		print >> sys.stderr, "Invalid arguments. Type 'python stix_import.py --help' for usage.\n"
+		print >> sys.stderr, "Invalid arguments. Type 'python stix_Arcsight.py --help' for usage.\n"
 						
 
 if __name__ == "__main__":
