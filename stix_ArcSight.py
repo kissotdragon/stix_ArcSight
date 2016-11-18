@@ -158,6 +158,7 @@ def get_parser():
 	parser.add_option("--taxii_password", default=None, help="Set this to use password for TAXII BASIC authentication, if any")
 	parser.add_option("--taxii_cert", default=None, help="Set this to the cert file for TAXII CERT authentication, if any")
 	parser.add_option("--taxii_key", default=None, help="Set this to use password for TAXII CERT authentication, if any")
+	parser.add_option("--proxy", default=None, help="Set this to use a proxy server (format http[s]://proxy:port) to access TAXII, if necessary")
 
 	parser.add_option("--taxii_start_time", dest="begin_ts", default=None, help="The start timestamp (YYYY-MM-dd HH:MM:SS) in UTC " +
 		   "for the taxii poll request. Defaults to None.")
@@ -308,25 +309,28 @@ def main():
 		collection_name=args[0].collection,
 		exclusive_begin_timestamp_label=begin_ts,
 		inclusive_end_timestamp_label=end_ts,
-		poll_parameters=tm11.PollRequest.PollParameters())
+		poll_parameters=tm11.PollRequest.poll_parameters())
 
 		poll_req_xml = poll_req.to_xml()
 		
 		client = tc.HttpClient()
 		
 		if args[0].taxii_ssl:
-			client.setUseHttps(True)
+			client.set_use_https(True)
 		
 		if args[0].taxii_username:
-			client.setAuthType(1)
+			client.set_auth_type(1)
 			if not args[0].taxii_password:
 				args[0].taxii_password = getpass.getpass("Enter your taxii password: ")
-			client.setAuthCredentials({'username': args[0].taxii_username, 'password': args[0].taxii_password})
+			client.set_auth_credentials({'username': args[0].taxii_username, 'password': args[0].taxii_password})
 		elif args[0].taxii_key and args[0].taxii_cert:
-			client.setAuthType(2)
-			client.etAuthCredentials({'key': args[0].taxii_key, 'cert': args[0].taxii_cert})
+			client.set_auth_type(2)
+			client.set_auth_credentials({'key': args[0].taxii_key, 'cert': args[0].taxii_cert})
 
-		resp = client.callTaxiiService2(args[0].taxii, args[0].taxii_endpoint + "/poll/", t.VID_TAXII_XML_11, poll_req_xml, args[0].taxiiport)
+		if arg[0].proxy:
+			client.set_proxy(arg[0].proxy)
+
+		resp = client.call_taxii_service2(args[0].taxii, args[0].taxii_endpoint + "/poll/", t.VID_TAXII_XML_11, poll_req_xml, args[0].taxiiport)
 		
 		response_message = t.get_message_from_http_response(resp, '0')
 		response_dict = response_message.to_dict();
