@@ -156,7 +156,9 @@ def get_parser():
 	parser.add_option("--taxii_ssl", default=None, help="Set this to use SSL for the TAXII request")
 	parser.add_option("--taxii_username", default=None, help="Set this to the username for TAXII BASIC authentication, if any")
 	parser.add_option("--taxii_password", default=None, help="Set this to use password for TAXII BASIC authentication, if any")
-	
+	parser.add_option("--taxii_cert", default=None, help="Set this to the cert file for TAXII CERT authentication, if any")
+	parser.add_option("--taxii_key", default=None, help="Set this to use password for TAXII CERT authentication, if any")
+
 	parser.add_option("--taxii_start_time", dest="begin_ts", default=None, help="The start timestamp (YYYY-MM-dd HH:MM:SS) in UTC " +
 		   "for the taxii poll request. Defaults to None.")
 	
@@ -317,11 +319,12 @@ def main():
 		
 		if args[0].taxii_username:
 			client.setAuthType(1)
-
-		if not args[0].taxii_password:
-			args[0].taxii_password = getpass.getpass("Enter your taxii password: ")
-
-		client.setAuthCredentials({'username': args[0].taxii_username, 'password': args[0].taxii_password})
+			if not args[0].taxii_password:
+				args[0].taxii_password = getpass.getpass("Enter your taxii password: ")
+			client.setAuthCredentials({'username': args[0].taxii_username, 'password': args[0].taxii_password})
+		elif args[0].taxii_key and args[0].taxii_cert:
+			client.setAuthType(2)
+			client.etAuthCredentials({'key': args[0].taxii_key, 'cert': args[0].taxii_cert})
 
 		resp = client.callTaxiiService2(args[0].taxii, args[0].taxii_endpoint + "/poll/", t.VID_TAXII_XML_11, poll_req_xml, args[0].taxiiport)
 		
