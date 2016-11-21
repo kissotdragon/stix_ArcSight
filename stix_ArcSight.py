@@ -41,7 +41,7 @@ import libtaxii.clients as tc
 try:
     basestring
 except NameError:
-    basestring = str 
+    basestring = str
 
 
 
@@ -238,7 +238,7 @@ def get_parser():
         '-c',
         '--collection',
         default='default',
-        help='TAXII Data Collection to poll. Defaults to ' + default + '.')
+        help='TAXII Data Collection to poll. Defaults to \'default \'.')
     parser.add_option(
         '--taxii_endpoint',
         help='TAXII Service Endpoint. Required if -x is provided.',
@@ -302,8 +302,6 @@ def print_help(parser):
 
 def process_package_dict(args, stix_dict):
     values = []
-    key = ''
-    value = ''
     dest = CONFIG['DESTINATION_IP']['ip']
     dest_port = int(CONFIG['DESTINATION_IP']['port'])
     if 'observables' in stix_dict:
@@ -460,8 +458,8 @@ def main():
                 'cert': args[0].taxii_cert
             })
 
-        if arg[0].proxy:
-            client.set_proxy(arg[0].proxy)
+        if args[0].proxy:
+            client.set_proxy(args[0].proxy)
 
         resp = client.call_taxii_service2(
             args[0].taxii, args[0].taxii_endpoint + '/poll/',
