@@ -2,35 +2,48 @@
 # Author: John Kennedy
 # Email: kissotdragon@gmail.com
 # Date: 04/26/2016
-# 
+#
 # This is a derivative work from the stix_import.py script created by IBM-Security
 #
-# 
-import sys, socket, os, types, collections, json, re, io, urllib2, dateutil, datetime, time, pytz
-#from IPython.Debugger import Tracer; debug_here = Tracer()
-import pprint, getpass, csv
-from urlparse import urlparse
-import dicttoxml
-#import pickle
+#
+#python version compatibility
+from __future__ import print_function
+import pprint
+import getpass
+
+try:
+    # For Python2
+    from urlparse import urlparse
+except ImportError:
+    import urllib.parse as urlparse
+
 from optparse import OptionParser
 from optparse import BadOptionError
 from optparse import AmbiguousOptionError
-#import pudb; pu.db
-from stix.core import STIXPackage, STIXHeader
-from stix.utils.parser import EntityParser
-from stix.common import vocabs
-from stix.common.vocabs import VocabString
-from stix.common.vocabs import IndicatorType
+
+import sys
+import socket
+import collections
+import re
+import io
+import datetime
+import time
+import pytz
+
+from stix.core import STIXPackage
 
 import libtaxii as t
 import libtaxii.messages_11 as tm11
 import libtaxii.clients as tc
 
-import lxml.etree
-from xml.etree.ElementTree import XML, XMLParser, tostring, TreeBuilder
 
-#python version compatibility
-from __future__ import print_function
+#Python 3 string type handling
+try:
+    basestring
+except NameError:
+    basestring = str 
+
+
 
 # Set Global Timeout
 socket.setdefaulttimeout(30)
@@ -225,7 +238,7 @@ def get_parser():
         '-c',
         '--collection',
         default='default',
-        help='TAXII Data Collection to poll. Defaults to 'default'.')
+        help='TAXII Data Collection to poll. Defaults to ' + default + '.')
     parser.add_option(
         '--taxii_endpoint',
         help='TAXII Service Endpoint. Required if -x is provided.',
@@ -283,7 +296,8 @@ def print_help(parser):
     print(parser.format_help().strip(), file=sys.stderr)
 
 
-# Processes a STIX package dictionary and adds all indicators and observables to a CEF Syslog message and sent to ArcSight 
+# Processes a STIX package dictionary and adds all indicators and observables to a
+# CEF Syslog message and sent to ArcSight
 
 
 def process_package_dict(args, stix_dict):
@@ -312,7 +326,7 @@ def process_package_dict(args, stix_dict):
                         cef = 'CEF:0|IHC-OSINT|Soltra|1.0|100|Known Malicious ' + 'Website' + '|1|request=' + item + ' shost=' + u.netloc + ' msg=IHC-OSINT Malicious Domain ' + u.netloc
                         time.sleep(.02)
                         syslog(cef, host=dest, port=dest_port)
-                elif re.match('[^@]+@[^@]+\.[^@]+', item):
+                elif re.match(r'[^@]+@[^@]+\.[^@]+', item):
                     if args[0].verbose:
                         print('Email Address: %s' % (item))
                     if args[0].outfile:
@@ -322,7 +336,7 @@ def process_package_dict(args, stix_dict):
                         cef = 'CEF:0|IHC-OSINT|Soltra|1.0|100|Known Malicious ' + 'Email' + '|1|suser=' + item + ' msg=IHC-OSINT Malicious Email ' + item
                         time.sleep(.02)
                         syslog(cef, host=dest, port=dest_port)
-                elif re.match('^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', item):
+                elif re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', item):
                     if args[0].verbose:
                         print('IP Address: %s' % (item))
                     if args[0].outfile:
@@ -347,7 +361,7 @@ def process_package_dict(args, stix_dict):
                         time.sleep(0.2)
                         syslog(cef, host=dest, port=dest_port)
                     elif re.match(
-                            '^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}$',
+                            r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}$',
                             item):
                         data = item.split(':')
                         #print data
@@ -383,10 +397,6 @@ def process_package_dict(args, stix_dict):
 
 
 def main():
-
-    # Create XML parser that can strip namespaces
-    xmlParser = EntityParser()
-
     stix_package = None
 
     argParser = get_parser()
@@ -471,7 +481,7 @@ def main():
                     #print >> sys.stderr, content['content']
 
                     try:
-                        # Parse the information 
+                        # Parse the information
                         stix_pkg = STIXPackage.from_xml(
                             io.BytesIO(content['content']))
                         stix_package = stix_pkg
@@ -492,17 +502,11 @@ def main():
 
     # Import from a XML file on disk
     elif args[0].file:
-
         stix_package = STIXPackage.from_xml(args[0].file)
-
         indicators = process_package_dict(args, stix_package.to_dict())
-
         print('Imported', indicators, 'indicators into set')
-
     else:
-        print(
-            'Invalid arguments. Type 'python stix_Arcsight.py --help' for usage.\n',
-            file=sys.stderr)
+        print('Invalid arguments. Type --help for usage.\n', file=sys.stderr)
 
 
 if __name__ == '__main__':
