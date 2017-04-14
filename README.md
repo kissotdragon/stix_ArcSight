@@ -1,4 +1,4 @@
-# Abount stix_ArcSight
+# About stix_ArcSight
 A STIX/TAXII client that grabs STIX data from a TAXII discovery service, parses out the indicators and observables, and can send the data to ArcSight via CEF Syslog
 
 # Requirements
